@@ -1,6 +1,8 @@
 const Joi = require('joi');
 
 const studentSchema = Joi.object({
+    studentId : Joi.number().min(4).required(),
+
     studentName: Joi.string()
         .alphanum()
         .min(3)
@@ -13,10 +15,39 @@ const studentSchema = Joi.object({
 
     studentEmail: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com'] } })
+        .required(),
+
+    contactNumber : Joi.number().min(10).required(),
+
+    isMentorAssigned : Joi.boolean(),
+
+    oldMentorName : Joi.string().alphanum().min(3).max(30),
+
+    newMentorName : Joi.string().alphanum().min(3).max(30),
+
+    mentorName : Joi.string()
+});
+
+// let studentNameSchema = Joi.array().unique('studentName', { ignoreUndefined: true });
+
+let studentKeys = Joi.object().keys({
+    studentId : Joi.number().min(4),
+    // studentEmail: Joi.string()
+    //     .email({ minDomainSegments: 2, tlds: { allow: ['com'] } })
+    //     .required(),
+    studentName: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        
         .required()
 });
 
+// const array_uniq_schema = Joi.array().unique((a, b) => a.studentName === b.studentName && a.studentId === b.studentId);
+
 const mentorSchema = Joi.object({
+    mentorId : Joi.number().min(4).required(),
+
     mentorName: Joi.string()
         .alphanum()
         .min(3)
@@ -25,7 +56,11 @@ const mentorSchema = Joi.object({
 
     mentorEmail: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com'] } })
-        .required()
+        .required(),
+    
+    contactNumber : Joi.number().min(10).required(),
+
+    students : Joi.array().unique('studentName', { ignoreUndefined: true })
 })
 
 module.exports = {studentSchema, mentorSchema};
@@ -39,7 +74,8 @@ module.exports = {studentSchema, mentorSchema};
     
 
 // try {
-//     const value = await studentSchema.validateAsync({ studentName: 'abc', qualification : 'btech' , studentEmail: 'abc@ex.com' });
+//     // const value = await mentorSchema.validateAsync({ mentorId: 123,mentorName: 'abc',  mentorEmail: 'abc@ex.com', contactNumber : "152",students : [{studentName: 'abc' },{studentName: 'abc' }]});
+//     const value = await studentSchema.validateAsync({ studentId: 123,studentName: 'abc',  studentEmail: 'abc@ex.com', contactNumber : "152", isMentorAssigned : false, qualification : 'btech',mentorName : '4'});
 //     console.log(value)
 // }
 // catch (err) { console.log(err)}
