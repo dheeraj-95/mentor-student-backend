@@ -10,6 +10,9 @@ const studentRouter = require('./routers/studentRouter');
 app
     .use(bodyParser.json())
     .use(cors())
+    .use('/',(req,res) => {
+        res.json('Hello from Mentor-Student-Backend App');
+    })
     .use('/api/mentor', mentorRouter)
     // .use('/api/getAllStudents/:mentorName', (req, res, next) => {
     //     req.mentorName = req.params.mentorName;
