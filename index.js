@@ -11,7 +11,7 @@ app
     .use(bodyParser.json())
     .use(cors())
     .get('/',(req,res) => {
-        res.json('Hello from Mentor-Student-Backend App');
+        res.json({status : 'Hello from Mentor-Student-Backend App'});
     })
     .use('/api/mentor', mentorRouter)
     .use('/api/student', studentRouter)
