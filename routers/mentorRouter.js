@@ -4,7 +4,6 @@ const {mentorSchema} = require('../schema/schema');
 const MongoClient = require('mongodb').MongoClient;
 const url = require('../config/config');
 
- 
 mentorRouter
     .post('/createMentor', async (req,res) => {
         try{
@@ -14,7 +13,7 @@ mentorRouter
             let ifExists = await db.collection('mentors').findOne({"mentorId" : req.body.mentorId});
             if(ifExists){
                 // console.log(ifExists);
-                res.status(400).send(`Mentor with ${req.body.mentorId} already exists. Please provide a unique Id`);
+                res.status(400).json({status :`Mentor with ${req.body.mentorId} already exists. Please provide a unique Id`});
             }else {
                 await db.collection('mentors').insertOne({
                     mentorId : req.body.mentorId,
@@ -45,7 +44,7 @@ mentorRouter
                 await db.collection('students').findOneAndUpdate({studentName : req.body.studentName}, {$set : {mentorName : req.body.mentorName}})
                 res.send('Details updated successfully');
             }else {
-                res.status(422).send(`${req.body.studentName} already assigned with a mentor`)
+                res.status(422).json({status : `${req.body.studentName} already assigned with a mentor`});
             }
             client.close()
         }catch(err) {
@@ -66,10 +65,10 @@ mentorRouter
                 await db.collection('mentors').findOneAndUpdate({mentorName : req.body.newMentorName},{$push : {students : req.body.studentName}})
                 await db.collection('students').findOneAndUpdate({studentName : req.body.studentName}, {$set : {isMentorAssigned : true}})
                 await db.collection('students').findOneAndUpdate({studentName : req.body.studentName}, {$set : {mentorName : req.body.newMentorName}})
-                res.send('Mentor Changed successfully');
+                res.status(200).json({status : 'Mentor Changed successfully'});
                 
             }else {
-                res.status(400).send('Mentor name is not registered, Please check the mentor name');
+                res.status(400).json({status : 'Mentor name is not registered, Please check the mentor name'});
             }
 
             client.close()

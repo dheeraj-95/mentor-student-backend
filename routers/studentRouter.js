@@ -16,7 +16,7 @@ studentRouter
             let ifNameExists = await db.collection('students').findOne({"studentName" : req.body.studentName});
             if(ifExists || ifNameExists){
                 // console.log(ifExists);
-                res.status(400).send(`Student with either ${req.body.studentId} or ${req.body.studentName} already exists. Please provide unique details`);
+                res.status(400).json({status : `Student with either ${req.body.studentId} or ${req.body.studentName} already exists. Please provide unique details`});
             }
             else {
 
